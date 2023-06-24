@@ -1,0 +1,6 @@
+framework module Pods_tvMazeApp_tvMazeAppUITests {
+  umbrella header "Pods-tvMazeApp-tvMazeAppUITests-umbrella.h"
+
+  export *
+  module * { export * }
+}
