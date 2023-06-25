@@ -6,6 +6,7 @@ target 'tvMazeApp' do
   use_frameworks!
   pod 'Alamofire'
   pod 'AlamofireImage'
+  pod 'SDWebImage'
   # Pods for tvMazeApp
 
   target 'tvMazeAppTests' do

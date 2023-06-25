@@ -14,6 +14,7 @@ class SeriesCollectionViewController: UICollectionViewController, UISearchBarDel
     
     var seriesArray : [Serie]!
     let searchBar = UISearchBar()
+    var collectionViewData: [Serie]!
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -38,7 +39,7 @@ class SeriesCollectionViewController: UICollectionViewController, UISearchBarDel
         collectionView.backgroundColor = .white
         collectionView.dataSource = self
         collectionView.delegate = self
-        
+        collectionViewData = seriesArray
         searchBar.delegate = self
         navigationItem.titleView = searchBar
     }
@@ -53,17 +54,26 @@ class SeriesCollectionViewController: UICollectionViewController, UISearchBarDel
 
     override func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
         // #warning Incomplete implementation, return the number of items
-        return seriesArray.count
+        return collectionViewData.count
     }
     
 
     override func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell: SerieCollectionViewCell = collectionView.dequeueReusableCell(withReuseIdentifier: reuseIdentifier, for: indexPath) as! SerieCollectionViewCell
         
-        cell.setupSerie(serie: seriesArray[indexPath.row])
+        cell.setupSerie(serie: collectionViewData[indexPath.row])
 
         return cell
     }
+    
+    override func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+           if(collectionViewData.count > 0){
+               let vc = SerieDetailViewController(serie:collectionViewData[indexPath.row] )
+           
+               self.navigationController?.pushViewController(vc, animated: true)
+           }
+       }
+    
     
     func getCellImage(serie: Serie) -> UIImage{
         var image: UIImage =  UIImage(named: "AppIcon")!
@@ -80,36 +90,6 @@ class SeriesCollectionViewController: UICollectionViewController, UISearchBarDel
             }
         return image
     }
-    // MARK: UICollectionViewDelegate
-
-    /*
-    // Uncomment this method to specify if the specified item should be highlighted during tracking
-    override func collectionView(_ collectionView: UICollectionView, shouldHighlightItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment this method to specify if the specified item should be selected
-    override func collectionView(_ collectionView: UICollectionView, shouldSelectItemAt indexPath: IndexPath) -> Bool {
-        return true
-    }
-    */
-
-    /*
-    // Uncomment these methods to specify if an action menu should be displayed for the specified item, and react to actions performed on the item
-    override func collectionView(_ collectionView: UICollectionView, shouldShowMenuForItemAt indexPath: IndexPath) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, canPerformAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) -> Bool {
-        return false
-    }
-
-    override func collectionView(_ collectionView: UICollectionView, performAction action: Selector, forItemAt indexPath: IndexPath, withSender sender: Any?) {
     
-    }
-    */
-
 }
 

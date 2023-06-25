@@ -9,11 +9,11 @@ import Alamofire
 
 class APIManager {
     static let shared = APIManager()
-    
+    private let baseUrl = "https://api.tvmaze.com"
     private init() {}
     
     func fetchData(completion: @escaping (Result<[Serie], Error>) -> Void) {
-        let url = "https://api.tvmaze.com/shows?page=2"
+        let url = "\(baseUrl)/shows?page=2"
         
         AF.request(url).responseDecodable(of: [Serie].self) { response in
             switch response.result {
@@ -24,6 +24,33 @@ class APIManager {
             }
         }
     }
+    
+    func fetchSeasons(serieId:Int, completion: @escaping (Result<[Season], Error>) -> Void) {
+            let url = "\(baseUrl)/shows/\(serieId)/seasons"
+            
+            AF.request(url).responseDecodable(of: [Season].self) { response in
+                switch response.result {
+                case .success(let data):
+                    completion(.success(data))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
+        
+        
+        func fetchEpisodes(seasonId:Int, completion: @escaping (Result<[Episode], Error>) -> Void) {
+            let url = "\(baseUrl)/seasons/\(seasonId)/episodes?embed=guestcast"
+            print(seasonId)
+            AF.request(url).responseDecodable(of: [Episode].self) { response in
+                switch response.result {
+                case .success(let data):
+                    completion(.success(data))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
     
     func postData(parameters: [String: Any], completion: @escaping (Result<Serie, Error>) -> Void) {
         let url = "https://api.example.com/post"
