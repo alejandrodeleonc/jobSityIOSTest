@@ -7,6 +7,7 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		437442812A4A147200834650 /* TitleCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 437442802A4A147200834650 /* TitleCollectionViewCell.swift */; };
 		4388DA4C2A464B9F003A9791 /* APIManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4388DA4B2A464B9F003A9791 /* APIManager.swift */; };
 		4388DA4F2A464E16003A9791 /* Serie.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4388DA4E2A464E16003A9791 /* Serie.swift */; };
 		4388DA562A46A238003A9791 /* SeriesCollectionViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4388DA552A46A238003A9791 /* SeriesCollectionViewController.swift */; };
@@ -51,6 +52,7 @@
 /* Begin PBXFileReference section */
 		287C2B11D2C1484DB7A07301 /* Pods_tvMazeAppTests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tvMazeAppTests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		3F82CF06F48DEAB68ABA899C /* Pods-tvMazeApp-tvMazeAppUITests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tvMazeApp-tvMazeAppUITests.debug.xcconfig"; path = "Target Support Files/Pods-tvMazeApp-tvMazeAppUITests/Pods-tvMazeApp-tvMazeAppUITests.debug.xcconfig"; sourceTree = "<group>"; };
+		437442802A4A147200834650 /* TitleCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TitleCollectionViewCell.swift; sourceTree = "<group>"; };
 		4388DA4B2A464B9F003A9791 /* APIManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = APIManager.swift; sourceTree = "<group>"; };
 		4388DA4E2A464E16003A9791 /* Serie.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Serie.swift; sourceTree = "<group>"; };
 		4388DA552A46A238003A9791 /* SeriesCollectionViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SeriesCollectionViewController.swift; sourceTree = "<group>"; };
@@ -167,6 +169,7 @@
 				43C58CDD2A4750CF00B1741F /* SerieCollectionViewCell.swift */,
 				43C58CF32A48019600B1741F /* HeroHeaderUIView.swift */,
 				43C58CF82A49E74000B1741F /* CollectionTableViewCell.swift */,
+				437442802A4A147200834650 /* TitleCollectionViewCell.swift */,
 				43C58CFA2A49E86A00B1741F /* ExpandableTableViewCell.swift */,
 			);
 			path = View;
@@ -487,6 +490,7 @@
 				43C58CFB2A49E86A00B1741F /* ExpandableTableViewCell.swift in Sources */,
 				43C58CF42A48019600B1741F /* HeroHeaderUIView.swift in Sources */,
 				43C58CF22A48013A00B1741F /* SerieDetailViewController.swift in Sources */,
+				437442812A4A147200834650 /* TitleCollectionViewCell.swift in Sources */,
 				43C58CF92A49E74000B1741F /* CollectionTableViewCell.swift in Sources */,
 				4388DA562A46A238003A9791 /* SeriesCollectionViewController.swift in Sources */,
 			);

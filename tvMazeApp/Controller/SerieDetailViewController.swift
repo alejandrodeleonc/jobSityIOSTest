@@ -14,6 +14,11 @@ enum Rows: Int {
     case episodesCell = 2
     case castCell = 3
 }
+enum Section: Int {
+    case information = 0
+    case episodes = 1
+    case cast = 2
+}
 
 class SerieDetailViewController: UIViewController {
     
@@ -25,6 +30,7 @@ class SerieDetailViewController: UIViewController {
     let button = UIButton()
     let dropDown = DropDown()
     private var episodes: [Episode] = []
+    private var cast: [Guest] = []
     // Inicializador personalizado que acepta una instancia de Serie
     init(serie: Serie) {
         super.init(nibName: nil, bundle: nil) 
@@ -53,6 +59,15 @@ class SerieDetailViewController: UIViewController {
                 }
         }
         
+        APIManager.shared.fetchCast(serieId: serie.id) { result in
+            switch result {
+                case .success(let data):
+                self.cast = data
+                case .failure(let error):
+                    // Maneja el error
+                    print(error.localizedDescription)
+                }
+        }
         
         configureNavbar()
         tableView.delegate = self
@@ -64,7 +79,9 @@ class SerieDetailViewController: UIViewController {
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
-        tableView.register(UINib(nibName: "ExpandableTableViewCell", bundle: nil), forCellReuseIdentifier: "ExpandableCell")
+        tableView.register(ExpandableTableViewCell.self, forCellReuseIdentifier: "ExpandableCell")
+        tableView.register(CollectionTableViewCell.self, forCellReuseIdentifier: "CollectionViewCell")
+        
     }
     
     override func viewDidLayoutSubviews() {
@@ -87,39 +104,96 @@ class SerieDetailViewController: UIViewController {
 extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource {
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 3
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 4
+        if section == Section.information.rawValue{
+            return 2
+        }else if (section == Section.episodes.rawValue){
+            return self.episodes.count
+        }
+        return 1
+        
     }
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        let row = indexPath.row
-        if row == Rows.summaryCell.rawValue{
-            
-            return UITableView.automaticDimension
-        }else{
-            return 50
-        }
+        
+        return indexPath.section  == Section.cast.rawValue ? 200: UITableView.automaticDimension
         
     }
-
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return 0
+    }
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         
         var cell = UITableViewCell()
         let row = indexPath.row
+        let section = indexPath.section
         
-        if row == Rows.summaryCell.rawValue{
-            setupSummaryCell(cell:cell)
-        }else if(row == Rows.seasonCell.rawValue){
-            setupSeasonCell(cell: cell)
+        if section == Section.information.rawValue{
+            if row == Rows.summaryCell.rawValue{
+                setupSummaryCell(cell:cell)
+            }else if(row == Rows.seasonCell.rawValue){
+                setupSeasonCell(cell: cell)
+                if(self.seasons.count > 0){
+                    button.setTitle("Season \(self.seasons[0].number)", for: .normal)
+                }
+            }
+        }else if(section == Section.episodes.rawValue){
+            let expcell = tableView.dequeueReusableCell(withIdentifier: "ExpandableCell", for: indexPath) as! ExpandableTableViewCell
+            
+            
+            expcell.set(title: episodes[row].name, description:episodes[0].summary, expanded: false)
+            cell = expcell
+        }else if(section == Section.cast.rawValue){
+            let tempcell = CollectionTableViewCell()
+            
+            tempcell.configure(guest: cast)
+            
+            cell = tempcell
         }
+            
         
         cell.selectionStyle = .none
         return cell
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let headerView = UIView()
+        headerView.backgroundColor = .white
+        
+        let titleLabel = UILabel()
+        titleLabel.translatesAutoresizingMaskIntoConstraints = false
+        titleLabel.font = UIFont.boldSystemFont(ofSize: 16)
+        titleLabel.text = (section == Section.information.rawValue) ? "" : (section == Section.episodes.rawValue) ? "Episodes (\(self.episodes.count))" : "Cast"
+        
+        headerView.addSubview(titleLabel)
+        
+        NSLayoutConstraint.activate([
+            titleLabel.leadingAnchor.constraint(equalTo: headerView.leadingAnchor, constant: 16),
+            titleLabel.centerYAnchor.constraint(equalTo: headerView.centerYAnchor)
+        ])
+        
+        return headerView
+    }
+    func tableView(_ tableView: UITableView, viewForFooterInSection section: Int) -> UIView? {
+        return nil
+    }
+    
+    func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        let row = indexPath.row
+        
+        if row == Rows.summaryCell.rawValue{
+            
+        }else if(row == Rows.seasonCell.rawValue){
+            
+        }else if (row == Rows.episodesCell.rawValue){
+            let cell = tableView.cellForRow(at: indexPath) as! ExpandableTableViewCell
+            cell.toggleExpandable()
+        }
+        
+    }
     
     
     func setupSummaryCell(cell: UITableViewCell){
@@ -166,7 +240,6 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
     
     func setupSeasonCell(cell:UITableViewCell){
         // Configurar el botón
-        button.setTitle("Season \(self.seasons[0].number)", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.layer.borderWidth = 1.0
         button.layer.borderColor = UIColor.gray.cgColor
@@ -196,8 +269,9 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
         let defaultSelectedIndex = 0
         dropDown.selectRow(at: defaultSelectedIndex)
         dropDown.selectionAction = { [weak self] (index, item) in
+            self?.button.setTitle("\(item)", for: .normal)
             self?.getEpisodesWithSeason(seasonID: self?.seasons[index].id ?? 0)
-                self?.button.setTitle("\(item)", for: .normal)
+
             }
 
             button.addTarget(self, action: #selector(showDropdown(_:)), for: .touchUpInside)
@@ -229,6 +303,7 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
             case .success(let data):
                 
                 self.episodes = data
+                self.tableView.reloadData()
                 break
                 
             case .failure(let error):

@@ -35,6 +35,7 @@ class SeriesCollectionViewController: UICollectionViewController, UISearchBarDel
         // Registra la clase de celda personalizada
         collectionView.register(SerieCollectionViewCell.self, forCellWithReuseIdentifier: reuseIdentifier)
         
+        
         // Otros ajustes de la colección
         collectionView.backgroundColor = .white
         collectionView.dataSource = self

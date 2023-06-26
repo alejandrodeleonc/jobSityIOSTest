@@ -52,6 +52,19 @@ class APIManager {
             }
         }
     
+    func fetchCast(serieId:Int, completion: @escaping (Result<[Guest], Error>) -> Void) {
+            let url = "\(baseUrl)/shows/\(serieId)/cast"
+            
+            AF.request(url).responseDecodable(of: [Guest].self) { response in
+                switch response.result {
+                case .success(let data):
+                    completion(.success(data))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
+            }
+        }
+    
     func postData(parameters: [String: Any], completion: @escaping (Result<Serie, Error>) -> Void) {
         let url = "https://api.example.com/post"
         
