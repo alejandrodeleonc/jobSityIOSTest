@@ -7,6 +7,7 @@ target 'tvMazeApp' do
   pod 'Alamofire'
   pod 'AlamofireImage'
   pod 'SDWebImage'
+  pod 'DropDown'
   # Pods for tvMazeApp
 
   target 'tvMazeAppTests' do

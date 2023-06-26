@@ -6,6 +6,7 @@
 //
 
 import UIKit
+import DropDown
 
 enum Rows: Int {
     case summaryCell = 0
@@ -22,7 +23,8 @@ class SerieDetailViewController: UIViewController {
     var serie: Serie!
     private var seasons:[Season] = []
     let button = UIButton()
-
+    let dropDown = DropDown()
+    private var episodes: [Episode] = []
     // Inicializador personalizado que acepta una instancia de Serie
     init(serie: Serie) {
         super.init(nibName: nil, bundle: nil) 
@@ -44,11 +46,13 @@ class SerieDetailViewController: UIViewController {
             switch result {
                 case .success(let data):
                 self.seasons = data
+                self.getEpisodesWithSeason(seasonID: data[0].id)
                 case .failure(let error):
                     // Maneja el error
                     print(error.localizedDescription)
                 }
         }
+        
         
         configureNavbar()
         tableView.delegate = self
@@ -56,6 +60,7 @@ class SerieDetailViewController: UIViewController {
         headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 500))
         headerView?.configure(serie: serie)
         tableView.tableHeaderView = headerView
+        tableView.separatorStyle = .none
         navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
         navigationController?.navigationBar.shadowImage = UIImage()
         navigationController?.navigationBar.isTranslucent = true
@@ -111,7 +116,7 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
             setupSeasonCell(cell: cell)
         }
         
-        
+        cell.selectionStyle = .none
         return cell
     }
     
@@ -161,14 +166,15 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
     
     func setupSeasonCell(cell:UITableViewCell){
         // Configurar el botón
-        let button = UIButton()
-        button.setTitle("Seleccionar opción", for: .normal)
+        button.setTitle("Season \(self.seasons[0].number)", for: .normal)
         button.setTitleColor(.black, for: .normal)
         button.layer.borderWidth = 1.0
         button.layer.borderColor = UIColor.gray.cgColor
         button.layer.cornerRadius = 4.0
         button.translatesAutoresizingMaskIntoConstraints = false
+        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
         
+    
         
         cell.contentView.addSubview(button)
         
@@ -178,18 +184,27 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
             ])
             
 
-//            let dropDown = DropDown()
-//            dropDown.anchorView = button
-//            dropDown.dataSource = ["Opción 1", "Opción 2", "Opción 3"]
-//            dropDown.selectionAction = { [weak self] (index, item) in
-//                print("Opción seleccionada: \(item)")
-//            }
-//
-//            button.addTarget(self, action: #selector(showDropdown(_:)), for: .touchUpInside)
+            
+            dropDown.anchorView = button
+        var seasonsNames:[String] = []
+            seasons.forEach { element in
+                // Código para cada elemento del arreglo
+                seasonsNames.append("Season \(element.number)")
+                print(element)
+            }
+        dropDown.dataSource = seasonsNames
+        let defaultSelectedIndex = 0
+        dropDown.selectRow(at: defaultSelectedIndex)
+        dropDown.selectionAction = { [weak self] (index, item) in
+            self?.getEpisodesWithSeason(seasonID: self?.seasons[index].id ?? 0)
+                self?.button.setTitle("\(item)", for: .normal)
+            }
+
+            button.addTarget(self, action: #selector(showDropdown(_:)), for: .touchUpInside)
     }
     
-    @objc func showDropdown() {
-//        dropDown.show()
+    @objc func showDropdown(_ sender: UIButton) {
+        dropDown.show()
     }
 
     
@@ -206,5 +221,22 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
                 
         return yearString
     }
+    
+    
+    func getEpisodesWithSeason(seasonID: Int){
+        APIManager.shared.fetchEpisodes(seasonId: seasonID) { result in
+            switch result {
+            case .success(let data):
+                
+                self.episodes = data
+                break
+                
+            case .failure(let error):
+                // Maneja el error
+                print(error.localizedDescription)
+            }
+        }
+    }
+    
 }
 
