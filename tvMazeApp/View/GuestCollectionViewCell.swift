@@ -1,5 +1,5 @@
 //
-//  TitleCollectionViewCell.swift
+//  GuestCollectionViewCell.swift
 //  tvMazeApp
 //
 //  Created by Alejandro De León on 26/6/23.
@@ -7,12 +7,12 @@
 
 import UIKit
 
-class TitleCollectionViewCell: UICollectionViewCell {
-    static let identifier = "TitleCollectionViewCell"
+class GuestCollectionViewCell: UICollectionViewCell {
+    static let identifier = "GuestCollectionViewCell"
     
     private let posterImageView: UIImageView = {
         let imageView = UIImageView()
-        imageView.contentMode = .scaleAspectFill
+        imageView.contentMode = .scaleAspectFit
         return imageView
     }()
     
