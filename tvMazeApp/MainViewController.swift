@@ -13,7 +13,7 @@ class MainViewController: UIViewController {
         super.viewDidLoad()
         // Do any additional setup after loading the view.
         view.backgroundColor = .systemMint
-        APIManager.shared.fetchData(completion: { result in
+        APIManager.shared.fetchSeries(page: "1", completion: { result in
             switch result {
                 case .success(let data):
                     // Procesa los datos recibidos

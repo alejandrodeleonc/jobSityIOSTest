@@ -12,8 +12,8 @@ class APIManager {
     private let baseUrl = "https://api.tvmaze.com"
     private init() {}
     
-    func fetchData(completion: @escaping (Result<[Serie], Error>) -> Void) {
-        let url = "\(baseUrl)/shows?page=2"
+    func fetchSeries(page:String, completion: @escaping (Result<[Serie], Error>) -> Void) {
+        let url = "\(baseUrl)/shows?page=\(page)"
         
         AF.request(url).responseDecodable(of: [Serie].self) { response in
             switch response.result {

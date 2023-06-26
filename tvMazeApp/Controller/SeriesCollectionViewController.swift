@@ -8,6 +8,8 @@
 import UIKit
 import Alamofire
 import AlamofireImage
+import DropDown
+
 private let reuseIdentifier = "Cell"
 
 class SeriesCollectionViewController: UICollectionViewController, UISearchBarDelegate {
@@ -15,6 +17,9 @@ class SeriesCollectionViewController: UICollectionViewController, UISearchBarDel
     var seriesArray : [Serie]!
     let searchBar = UISearchBar()
     var collectionViewData: [Serie]!
+    let dropDown = DropDown()
+    let dividend = 1800
+    let divisor = 250
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,8 +46,60 @@ class SeriesCollectionViewController: UICollectionViewController, UISearchBarDel
         collectionView.dataSource = self
         collectionView.delegate = self
         collectionViewData = seriesArray
+        
         searchBar.delegate = self
+        let pagesButton = UIBarButtonItem(image: UIImage(systemName: "list.bullet"), style: .plain, target: self, action: #selector(showDropdown))
+           
+           // Asignar el botón a la barra de navegación
+           
+        
+        // Crear el botón con el icono de lupa
+           let searchButton = UIBarButtonItem(barButtonSystemItem: .search, target: self, action: #selector(searchButtonTapped))
+           
+           
+        navigationItem.leftBarButtonItem = pagesButton
+        navigationItem.rightBarButtonItem =  searchButton
         navigationItem.titleView = searchBar
+        
+        setupDropDown()
+
+
+    }
+    
+    func setupDropDown(){
+        let result = Int(floor(Double(dividend) / Double(divisor)))
+        
+        var strings: [String] = []
+        
+        for i in 1...result {
+            let numberString = String(i)
+            strings.append(numberString)
+        }
+        dropDown.anchorView = navigationItem.leftBarButtonItem
+        dropDown.dataSource = strings
+        let defaultSelectedIndex = 0
+        dropDown.selectRow(at: defaultSelectedIndex)
+        dropDown.selectionAction = { [weak self] (index, item) in
+            print("\(item)")
+            
+            self?.getSeriesWithPage(page:item)
+            
+        }
+    }
+    
+    
+    @objc func showDropdown(_ sender: UIButton) {
+        dropDown.show()
+    }
+    
+    @objc func rightButtonTapped() {
+        // Implementa la lógica que deseas ejecutar cuando se presione el botón
+        print("Botón presionado")
+    }
+    
+    @objc func searchButtonTapped() {
+        // Implementa la lógica que deseas ejecutar cuando se presione el botón de búsqueda
+        print("Botón de búsqueda presionado")
     }
 
 
@@ -90,6 +147,23 @@ class SeriesCollectionViewController: UICollectionViewController, UISearchBarDel
                 
             }
         return image
+    }
+    
+    
+    
+    func getSeriesWithPage(page:String){
+        APIManager.shared.fetchSeries(page:page, completion: { result in
+            switch result {
+            case .success(let data):
+                self.seriesArray = data
+                self.collectionViewData = self.seriesArray
+                
+                self.collectionView.reloadData()
+            case .failure(let error):
+                // Maneja el error
+                print(error.localizedDescription)
+            }
+        })
     }
     
 }

@@ -207,7 +207,7 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
         
         nameLabel.translatesAutoresizingMaskIntoConstraints = false
         nameLabel.font = UIFont.boldSystemFont(ofSize: 18)
-        nameLabel.text = "\(self.serie.name) (\(getYearFromADate(dateString:self.serie.premiered)))"
+        nameLabel.text = "\(self.serie.name) (\(getYearFromADate(dateString:self.serie.premiered ?? "")))"
         cell.addSubview(nameLabel)
         
         summaryLabel.translatesAutoresizingMaskIntoConstraints = false

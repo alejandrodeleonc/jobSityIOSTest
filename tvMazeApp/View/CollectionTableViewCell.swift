@@ -20,7 +20,7 @@ class CollectionTableViewCell: UITableViewCell {
         let layout = UICollectionViewFlowLayout()
              
         layout.scrollDirection = .horizontal
-        layout.itemSize = CGSize(width: 160, height: 160)
+        layout.itemSize = CGSize(width: 130, height: 160)
 //        layout.sectionInset = UIEdgeInsets(top: 10, left: 5, bottom: 10, right: 5)
         let collectionView = UICollectionView(frame: .zero, collectionViewLayout: layout)
         collectionView.register(GuestCollectionViewCell.self, forCellWithReuseIdentifier: GuestCollectionViewCell.identifier)
@@ -87,7 +87,15 @@ extension CollectionTableViewCell: UICollectionViewDelegate, UICollectionViewDat
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
         collectionView.deselectItem(at: indexPath, animated: true)
-        
+        if let cell = collectionView.cellForItem(at: indexPath) as? GuestCollectionViewCell {
+            
+            cell.flipViews()
+        }
+     
     }
+    
+    
+
+    
 }
 

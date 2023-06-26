@@ -35,7 +35,7 @@ class SerieCollectionViewCell: UICollectionViewCell {
     func setupSerie(serie:Serie) {
         self.serie = serie
         serieNameLabel.text = serie.name
-        premierDateLabel.text = getYearFromADate(dateString: serie.premiered)
+        premierDateLabel.text = getYearFromADate(dateString: serie.premiered ?? "N/A")
         
         if let ratingAverage = serie.rating.average {
             ratingLabel.text = String(ratingAverage)
