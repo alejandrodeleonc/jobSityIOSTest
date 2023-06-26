@@ -276,16 +276,16 @@
       <BreakpointProxy
          BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
          <BreakpointContent
-            uuid = "6286D69A-D889-42A5-A295-7B429BE37D52"
+            uuid = "2550B06E-C4C4-4D05-ACDC-7B0C756139A2"
             shouldBeEnabled = "Yes"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "tvMazeApp/Controller/SerieDetailViewController.swift"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "35"
-            endingLineNumber = "35"
-            landmarkName = "viewDidLoad()"
+            startingLineNumber = "137"
+            endingLineNumber = "137"
+            landmarkName = "setupSummaryCell(cell:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
