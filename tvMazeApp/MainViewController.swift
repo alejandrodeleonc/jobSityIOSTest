@@ -23,6 +23,7 @@ class MainViewController: UIViewController {
                 viewController.seriesArray = data
 
                 self.navigationController?.pushViewController(viewController, animated: true)
+                self.navigationController?.navigationBar.tintColor = .systemMint
                 case .failure(let error):
                     // Maneja el error
                     print(error.localizedDescription)

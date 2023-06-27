@@ -25,10 +25,7 @@ extension String {
     
     
     func parseHTMLString(withSize size: CGFloat, withFontName fontName: String) -> NSAttributedString? {
-         guard let font = UIFont(name: fontName, size: size) else {
-             return nil
-         }
-         
+    
          let modifiedHTMLString = String(format: "<span style='font-family:%@; font-size: %fpx;'>%@</span>", fontName, size, self)
          
          guard let data = modifiedHTMLString.data(using: .unicode) else {

@@ -206,8 +206,6 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
         }else if(section == Section.cast.rawValue){
             
         }else if (section == Section.episodes.rawValue){
-            let cell = tableView.cellForRow(at: indexPath) as! ExpandableTableViewCell
-            
             self.episodes[row].showInfo = !self.episodes[row].showInfo
             
             tableView.reloadData()
@@ -266,7 +264,7 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
         button.layer.borderColor = UIColor.gray.cgColor
         button.layer.cornerRadius = 4.0
         button.translatesAutoresizingMaskIntoConstraints = false
-        button.contentEdgeInsets = UIEdgeInsets(top: 8, left: 16, bottom: 8, right: 16)
+        button.layoutMargins = UIEdgeInsets(top: 8, left: 8, bottom: 8, right: 8)
         
     
         
