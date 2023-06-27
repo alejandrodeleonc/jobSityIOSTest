@@ -20,6 +20,15 @@ class GuestCollectionViewCell: UICollectionViewCell {
         view.isHidden = true
         return view
     }()
+    private let detailLabel: UILabel  = {
+        let detail: UILabel = UILabel()
+        
+        detail.translatesAutoresizingMaskIntoConstraints = false
+        detail.numberOfLines = 0
+        detail.lineBreakMode = .byWordWrapping
+        detail.font = UIFont.systemFont(ofSize: 14, weight: .light)
+        return detail
+    }()
     
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -36,6 +45,13 @@ class GuestCollectionViewCell: UICollectionViewCell {
         super.layoutSubviews()
         posterImageView.frame = contentView.bounds
         detailView.frame = contentView.bounds
+        self.detailView.addSubview(detailLabel)
+        
+        NSLayoutConstraint.activate([
+            detailLabel.trailingAnchor.constraint(equalTo: self.detailView.trailingAnchor, constant: -10),
+            detailLabel.leadingAnchor.constraint(equalTo: self.detailView.leadingAnchor, constant: 10),
+            detailLabel.topAnchor.constraint(equalTo: self.detailView.topAnchor, constant: 20),
+                ])
     }
     
     
@@ -52,29 +68,13 @@ class GuestCollectionViewCell: UICollectionViewCell {
     
     public func setupDetailView(guest: Guest){
         self.detailView.isHidden = true
+        let personName = guest.person.name.parseHTMLString(withSize: 8, withFontName: "Helvetica")?.string ?? ""
+        let characterName = guest.character.name.parseHTMLString(withSize: 8, withFontName: "Helvetica")?.string ?? ""
         
-        let detail: UILabel = UILabel()
+        let description = "<strong>\(personName)</strong><br>the one who played the character named:<br><strong>\(characterName)</strong>"
         
-        detail.translatesAutoresizingMaskIntoConstraints = false
-        detail.numberOfLines = 0
-        detail.lineBreakMode = .byWordWrapping
-        detail.font = UIFont.systemFont(ofSize: 14, weight: .light)
-        let detailText = "\(guest.person.name.parseHTMLString(withSize: 8, withFontName: "Helvetica")?.string ?? "")<br>\(guest.character.name.parseHTMLString(withSize: 8, withFontName: "Helvetica")?.string ?? "" )".parseHTMLString(withSize: 8, withFontName: "Helvetica")
-        
-        detail.attributedText = detailText
-    
-        
-        
-        self.detailView.addSubview(detail)
-        
-        NSLayoutConstraint.activate([
-            detail.trailingAnchor.constraint(equalTo: self.detailView.trailingAnchor, constant: -10),
-            detail.leadingAnchor.constraint(equalTo: self.detailView.leadingAnchor, constant: 10),
-            detail.topAnchor.constraint(equalTo: self.detailView.topAnchor, constant: 20),
-            detail.bottomAnchor.constraint(equalTo: self.detailView.bottomAnchor, constant: -20),
-                ])
-        
-    
+        detailLabel.attributedText = description.parseHTMLString(withSize: 14, withFontName: "Helvetica")
+
     }
     
     

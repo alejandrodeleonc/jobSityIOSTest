@@ -94,12 +94,26 @@ class SeriesCollectionViewController: UICollectionViewController, UISearchBarDel
     
     @objc func rightButtonTapped() {
         // Implementa la lógica que deseas ejecutar cuando se presione el botón
-        print("Botón presionado")
+        
     }
     
     @objc func searchButtonTapped() {
         // Implementa la lógica que deseas ejecutar cuando se presione el botón de búsqueda
-        print("Botón de búsqueda presionado")
+        let query = self.searchBar.text
+        APIManager.shared.fetchSearch(query: query ?? "") { result in
+            switch result {
+            case .success(let data):
+                
+                if(data.count > 0){
+                    self.seriesArray = data
+                    self.collectionViewData = self.seriesArray
+                }
+                self.collectionView.reloadData()
+            case .failure(let error):
+                // Maneja el error
+                print(error.localizedDescription)
+            }
+        }
     }
 
 
@@ -166,5 +180,32 @@ class SeriesCollectionViewController: UICollectionViewController, UISearchBarDel
         })
     }
     
+    
+    func filterCollectionView(withName name: String) {
+           //TODO: Needs to be change to use de endpoint  /search/shows?q=:query
+           
+           if name.isEmpty {
+               // Si el nombre está vacío, muestra todos los elementos originales
+               collectionViewData = seriesArray
+           } else {
+               // Filtra los elementos originales por nombre
+               collectionViewData = seriesArray.filter { $0.name.lowercased().contains(name.lowercased()) }
+           }
+        
+        if(self.seriesArray.count == 0){
+            self.getSeriesWithPage(page:"1")
+        }
+           
+           // Actualiza el UICollectionView
+           collectionView.reloadData()
+           
+       }
+       
+       func searchBar(_ searchBar: UISearchBar, textDidChange searchText: String) {
+           filterCollectionView(withName: searchText)
+       }
+    
+        
+
 }
 

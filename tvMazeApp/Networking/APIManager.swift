@@ -65,18 +65,24 @@ class APIManager {
             }
         }
     
-    func postData(parameters: [String: Any], completion: @escaping (Result<Serie, Error>) -> Void) {
-        let url = "https://api.example.com/post"
-        
-        AF.request(url, method: .post, parameters: parameters).responseDecodable(of: Serie.self) { response in
-            switch response.result {
-            case .success(let data):
-                completion(.success(data))
-            case .failure(let error):
-                completion(.failure(error))
+    
+    func fetchSearch(query:String, completion: @escaping (Result<[Serie], Error>) -> Void) {
+            let url = "\(baseUrl)/search/shows?q=\(query)"
+            
+            AF.request(url).responseDecodable(of: [Show].self) { response in
+                switch response.result {
+                case .success(let data):
+                    var series: [Serie] = []
+                    for show in data{
+                        series.append(show.serie)
+                    }
+                    completion(.success(series))
+                case .failure(let error):
+                    completion(.failure(error))
+                }
             }
         }
-    }
+
     
     
 }

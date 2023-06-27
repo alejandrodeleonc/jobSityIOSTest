@@ -27,6 +27,7 @@
 		43CA75FA2A462EFD00291F4B /* tvMazeAppTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA75F92A462EFD00291F4B /* tvMazeAppTests.swift */; };
 		43CA76042A462EFD00291F4B /* tvMazeAppUITests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA76032A462EFD00291F4B /* tvMazeAppUITests.swift */; };
 		43CA76062A462EFD00291F4B /* tvMazeAppUITestsLaunchTests.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43CA76052A462EFD00291F4B /* tvMazeAppUITestsLaunchTests.swift */; };
+		43E6A4492A4A74B3006461F9 /* Show.swift in Sources */ = {isa = PBXBuildFile; fileRef = 43E6A4482A4A74B3006461F9 /* Show.swift */; };
 		77B8EAB96B3B030C91B565E5 /* Pods_tvMazeApp_tvMazeAppUITests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 72962956193562C468206AAB /* Pods_tvMazeApp_tvMazeAppUITests.framework */; };
 		AF4755F73D64D788B3729B97 /* Pods_tvMazeAppTests.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 287C2B11D2C1484DB7A07301 /* Pods_tvMazeAppTests.framework */; };
 		B1660D26F7903E20CDD70369 /* Pods_tvMazeApp.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 9D4C64F5D793069704B5EE3C /* Pods_tvMazeApp.framework */; };
@@ -76,6 +77,7 @@
 		43CA75FF2A462EFD00291F4B /* tvMazeAppUITests.xctest */ = {isa = PBXFileReference; explicitFileType = wrapper.cfbundle; includeInIndex = 0; path = tvMazeAppUITests.xctest; sourceTree = BUILT_PRODUCTS_DIR; };
 		43CA76032A462EFD00291F4B /* tvMazeAppUITests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tvMazeAppUITests.swift; sourceTree = "<group>"; };
 		43CA76052A462EFD00291F4B /* tvMazeAppUITestsLaunchTests.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = tvMazeAppUITestsLaunchTests.swift; sourceTree = "<group>"; };
+		43E6A4482A4A74B3006461F9 /* Show.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Show.swift; sourceTree = "<group>"; };
 		59F0478EF3D176A4B86D0765 /* Pods-tvMazeAppTests.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tvMazeAppTests.debug.xcconfig"; path = "Target Support Files/Pods-tvMazeAppTests/Pods-tvMazeAppTests.debug.xcconfig"; sourceTree = "<group>"; };
 		6F12C8800F42A13E897E219E /* Pods-tvMazeApp.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-tvMazeApp.debug.xcconfig"; path = "Target Support Files/Pods-tvMazeApp/Pods-tvMazeApp.debug.xcconfig"; sourceTree = "<group>"; };
 		72962956193562C468206AAB /* Pods_tvMazeApp_tvMazeAppUITests.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_tvMazeApp_tvMazeAppUITests.framework; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -150,6 +152,7 @@
 				4388DA4E2A464E16003A9791 /* Serie.swift */,
 				43C58CED2A47FFB000B1741F /* Season.swift */,
 				43C58CEF2A47FFC700B1741F /* Episode.swift */,
+				43E6A4482A4A74B3006461F9 /* Show.swift */,
 			);
 			path = ViewModel;
 			sourceTree = "<group>";
@@ -484,6 +487,7 @@
 				4388DA4C2A464B9F003A9791 /* APIManager.swift in Sources */,
 				43CA75E32A462EFA00291F4B /* AppDelegate.swift in Sources */,
 				43CA75E52A462EFA00291F4B /* SceneDelegate.swift in Sources */,
+				43E6A4492A4A74B3006461F9 /* Show.swift in Sources */,
 				4388DA4F2A464E16003A9791 /* Serie.swift in Sources */,
 				43C58CF72A49D94B00B1741F /* Helpers.swift in Sources */,
 				43C58CF02A47FFC700B1741F /* Episode.swift in Sources */,
