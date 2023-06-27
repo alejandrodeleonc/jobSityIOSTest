@@ -6,6 +6,8 @@
 //
 
 import UIKit
+import Alamofire
+import AlamofireImage
 
 class ExpandableTableViewCell: UITableViewCell {
     static let reuseIdentifier = "ExpandableTableViewCell"
@@ -96,8 +98,8 @@ class ExpandableTableViewCell: UITableViewCell {
             stackView.leadingAnchor.constraint(equalTo: contentView.leadingAnchor),
             stackView.bottomAnchor.constraint(equalTo: contentView.bottomAnchor),
             stackView.trailingAnchor.constraint(equalTo: contentView.trailingAnchor),
-            iconImageView.widthAnchor.constraint(equalToConstant: 32),
-            iconImageView.heightAnchor.constraint(equalToConstant: 32),
+            iconImageView.widthAnchor.constraint(equalToConstant: 100),
+            iconImageView.heightAnchor.constraint(equalToConstant: 100),
             chevronImageView.widthAnchor.constraint(equalToConstant: 18),
             chevronImageView.heightAnchor.constraint(equalToConstant: 18),
             descriptionLabel.topAnchor.constraint(equalTo: expandableView.topAnchor, constant: 8),
@@ -107,10 +109,10 @@ class ExpandableTableViewCell: UITableViewCell {
         ])
     }
     
-    func set(title: String, description:String,  expanded:Bool) {
-        iconImageView.image = UIImage(systemName: "A")
+    func set(title: String, description:String, expanded:Bool) {
+        iconImageView.image = UIImage(named: "logoIcon")!
         titleLabel.text = title
-        descriptionLabel.text = description
+        descriptionLabel.attributedText = description.parseHTMLString(withSize: 14, withFontName: "Helvetica")
         expandableView.isHidden = !expanded
         let tapGesture = UITapGestureRecognizer(target: self, action: #selector(toggleExpandable))
         chevronImageView.addGestureRecognizer(tapGesture)
@@ -120,5 +122,23 @@ class ExpandableTableViewCell: UITableViewCell {
     
     @objc func toggleExpandable(){
         expandableView.isHidden = !expandableView.isHidden
+        chevronImageView.image = (!expandableView.isHidden ? UIImage(systemName: "chevron.up") : UIImage(systemName: "chevron.down"))?.withRenderingMode(.alwaysTemplate)
+        self.layoutSubviews()
+    }
+    
+    
+    func getCellImage(imageUrl: String){
+        var image: UIImage =  UIImage(named: "logoIcon")!
+        AF.request(imageUrl, method: .get).response{ response in
+            
+            switch response.result {
+                case .success(let responseData):
+                image = UIImage(data: responseData!, scale:1) ?? UIImage(named: "")!
+                self.iconImageView.image = image
+                case .failure(let error):
+                    print("error--->",error)
+                }
+                
+            }
     }
 }

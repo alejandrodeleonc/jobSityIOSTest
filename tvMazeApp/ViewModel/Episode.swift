@@ -22,6 +22,7 @@ struct Episode: Codable {
     let image: Image
     let summary: String
     let embedded: Embedded
+    var showInfo: Bool = false
     private enum CodingKeys: String, CodingKey {
            case id, url, name, season, number, type, airdate, airtime, airstamp, runtime, rating, image, summary
            case embedded = "_embedded"

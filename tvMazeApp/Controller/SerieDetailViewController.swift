@@ -47,46 +47,27 @@ class SerieDetailViewController: UIViewController {
         super.viewDidLoad()
         tableView.translatesAutoresizingMaskIntoConstraints = false
         view.addSubview(tableView)
-        
-        APIManager.shared.fetchSeasons(serieId: serie.id) { result in
-            switch result {
-                case .success(let data):
-                self.seasons = data
-                self.getEpisodesWithSeason(seasonID: data[0].id)
-                case .failure(let error):
-                    // Maneja el error
-                    print(error.localizedDescription)
-                }
-        }
-        
-        APIManager.shared.fetchCast(serieId: serie.id) { result in
-            switch result {
-                case .success(let data):
-                self.cast = data
-                case .failure(let error):
-                    // Maneja el error
-                    print(error.localizedDescription)
-                }
-        }
-        
+        getSeasons()
+        getCast()
         configureNavbar()
+        setupTableView()
+    }
+    
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        tableView.frame = view.bounds
+    }
+    
+    func setupTableView(){
         tableView.delegate = self
         tableView.dataSource = self
         headerView = HeroHeaderUIView(frame: CGRect(x: 0, y: 0, width: view.bounds.width, height: 500))
         headerView?.configure(serie: serie)
         tableView.tableHeaderView = headerView
         tableView.separatorStyle = .none
-        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
-        navigationController?.navigationBar.shadowImage = UIImage()
-        navigationController?.navigationBar.isTranslucent = true
+        
         tableView.register(ExpandableTableViewCell.self, forCellReuseIdentifier: "ExpandableCell")
         tableView.register(CollectionTableViewCell.self, forCellReuseIdentifier: "CollectionViewCell")
-        
-    }
-    
-    override func viewDidLayoutSubviews() {
-        super.viewDidLayoutSubviews()
-        tableView.frame = view.bounds
     }
     
     private func configureNavbar() {
@@ -97,6 +78,43 @@ class SerieDetailViewController: UIViewController {
             UIBarButtonItem(image: image, style: .done, target: self, action: nil)
         ]
         navigationController?.navigationBar.tintColor = .systemMint
+        navigationController?.navigationBar.setBackgroundImage(UIImage(), for: .default)
+        navigationController?.navigationBar.shadowImage = UIImage()
+        navigationController?.navigationBar.isTranslucent = true
+    }
+    
+    
+    func getSeasons(){
+        
+        APIManager.shared.fetchSeasons(serieId: serie.id) { result in
+            switch result {
+                case .success(let data):
+                self.seasons = data
+                if(self.seasons.count > 0){
+                    self.button.setTitle("Season \(self.seasons[0].number)", for: .normal)
+                    self.getEpisodesWithSeason(seasonID: data[0].id)
+                }else{
+                    self.button.isUserInteractionEnabled = false
+                    self.button.setTitle("Not availabe", for: .normal)
+                }
+                case .failure(let error):
+                    // Maneja el error
+                    print(error.localizedDescription)
+                }
+        }
+    }
+    
+    func getCast(){
+        
+        APIManager.shared.fetchCast(serieId: serie.id) { result in
+            switch result {
+                case .success(let data):
+                self.cast = data
+                case .failure(let error):
+                    // Maneja el error
+                    print(error.localizedDescription)
+                }
+        }
     }
 
 }
@@ -136,15 +154,14 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
                 setupSummaryCell(cell:cell)
             }else if(row == Rows.seasonCell.rawValue){
                 setupSeasonCell(cell: cell)
-                if(self.seasons.count > 0){
-                    button.setTitle("Season \(self.seasons[0].number)", for: .normal)
-                }
             }
         }else if(section == Section.episodes.rawValue){
             let expcell = tableView.dequeueReusableCell(withIdentifier: "ExpandableCell", for: indexPath) as! ExpandableTableViewCell
             
             
-            expcell.set(title: episodes[row].name, description:episodes[0].summary, expanded: false)
+            expcell.set(title: episodes[row].name, description:episodes[row].summary, expanded: episodes[row].showInfo)
+            
+            expcell.getCellImage(imageUrl: episodes[row].image.original)
             cell = expcell
         }else if(section == Section.cast.rawValue){
             let tempcell = CollectionTableViewCell()
@@ -183,14 +200,18 @@ extension SerieDetailViewController: UITableViewDelegate, UITableViewDataSource 
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         let row = indexPath.row
-        
-        if row == Rows.summaryCell.rawValue{
+        let section = indexPath.section
+        if section == Section.information.rawValue{
             
-        }else if(row == Rows.seasonCell.rawValue){
+        }else if(section == Section.cast.rawValue){
             
-        }else if (row == Rows.episodesCell.rawValue){
+        }else if (section == Section.episodes.rawValue){
             let cell = tableView.cellForRow(at: indexPath) as! ExpandableTableViewCell
-            cell.toggleExpandable()
+            
+            self.episodes[row].showInfo = !self.episodes[row].showInfo
+            
+            tableView.reloadData()
+
         }
         
     }
